@@ -4,10 +4,10 @@ import re
 import sys
 import struct
 
-from simplejson.scanner import make_scanner
+from lib.simplejson.scanner import make_scanner
 def _import_c_scanstring():
     try:
-        from simplejson._speedups import scanstring
+        from lib.simplejson._speedups import scanstring
         return scanstring
     except ImportError:
         return None

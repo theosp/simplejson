@@ -97,7 +97,7 @@ Using simplejson.tool from the shell to validate and pretty-print::
     $ echo '{ 1.2:3.4}' | python -m simplejson.tool
     Expecting property name: line 1 column 2 (char 2)
 """
-__version__ = '2.1.4'
+__version__ = '2.1.2'
 __all__ = [
     'dump', 'dumps', 'load', 'loads',
     'JSONDecoder', 'JSONDecodeError', 'JSONEncoder',
@@ -108,8 +108,8 @@ __author__ = 'Bob Ippolito <bob@redivi.com>'
 
 from decimal import Decimal
 
-from decoder import JSONDecoder, JSONDecodeError
-from encoder import JSONEncoder
+from lib.simplejson.decoder import JSONDecoder, JSONDecodeError
+from lib.simplejson.encoder import JSONEncoder
 def _import_OrderedDict():
     import collections
     try:
@@ -121,7 +121,7 @@ OrderedDict = _import_OrderedDict()
 
 def _import_c_make_encoder():
     try:
-        from simplejson._speedups import make_encoder
+        from lib.simplejson._speedups import make_encoder
         return make_encoder
     except ImportError:
         return None
@@ -191,8 +191,7 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True,
     if (not skipkeys and ensure_ascii and
         check_circular and allow_nan and
         cls is None and indent is None and separators is None and
-        encoding == 'utf-8' and default is None and not use_decimal
-        and not kw):
+        encoding == 'utf-8' and default is None and not kw):
         iterable = _default_encoder.iterencode(obj)
     else:
         if cls is None:
@@ -403,9 +402,9 @@ def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None,
 
 
 def _toggle_speedups(enabled):
-    import simplejson.decoder as dec
-    import simplejson.encoder as enc
-    import simplejson.scanner as scan
+    import lib.simplejson.decoder as dec
+    import lib.simplejson.encoder as enc
+    import lib.simplejson.scanner as scan
     c_make_encoder = _import_c_make_encoder()
     if enabled:
         dec.scanstring = dec.c_scanstring or dec.py_scanstring
